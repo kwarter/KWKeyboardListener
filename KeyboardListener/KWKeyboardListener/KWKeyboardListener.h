@@ -15,6 +15,8 @@
 - (void)keyboardWillHideWithInfos:(NSDictionary *)infos;
 - (void)keyboardDidShowWithInfos:(NSDictionary *)infos;
 - (void)keyboardDidHideWithInfos:(NSDictionary *)infos;
+- (void)keyboardWillChangeFrameWithInfos:(NSDictionary *)infos;
+- (void)keyboardDidChangeFrameWithInfos:(NSDictionary *)infos;
 
 @end
 

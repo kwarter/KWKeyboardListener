@@ -41,6 +41,8 @@ static KWKeyboardListener *sharedInstance;
     [defaultCenter addObserver:self selector:@selector(didHide:) name:UIKeyboardDidHideNotification object:nil];
     [defaultCenter addObserver:self selector:@selector(willShow:) name:UIKeyboardWillShowNotification object:nil];
     [defaultCenter addObserver:self selector:@selector(willHide:) name:UIKeyboardWillHideNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didChangeFrame:) name:UIKeyboardDidChangeFrameNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(willChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
     self.registeredListeners = [NSMutableSet new];
     
@@ -84,6 +86,14 @@ static KWKeyboardListener *sharedInstance;
 
 - (void)willHide:(NSNotification *)notification {
     [self notifyListenersWithSelector:@selector(keyboardWillHideWithInfos:) withObject:notification.userInfo];
+}
+
+- (void)didChangeFrame:(NSNotification *)notification {
+    [self notifyListenersWithSelector:@selector(keyboardDidChangeFrameWithInfos:) withObject:notification.userInfo];
+}
+
+- (void)willChangeFrame:(NSNotification *)notification {
+    [self notifyListenersWithSelector:@selector(keyboardWillChangeFrameWithInfos:) withObject:notification.userInfo];
 }
 
 @end
