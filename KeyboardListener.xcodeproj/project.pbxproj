@@ -14,6 +14,7 @@
 		3DA0C2F119F1B8B30077A7DC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DA0C2F019F1B8B30077A7DC /* Images.xcassets */; };
 		3DA0C2F419F1B8B30077A7DC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DA0C2F219F1B8B30077A7DC /* LaunchScreen.xib */; };
 		3DA0C30019F1B8B30077A7DC /* KeyboardListenerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA0C2FF19F1B8B30077A7DC /* KeyboardListenerTests.m */; };
+		3DA0C30C19F1B8E60077A7DC /* KWKeyboardListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA0C30B19F1B8E60077A7DC /* KWKeyboardListener.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		3DA0C2F919F1B8B30077A7DC /* KeyboardListenerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KeyboardListenerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DA0C2FE19F1B8B30077A7DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DA0C2FF19F1B8B30077A7DC /* KeyboardListenerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyboardListenerTests.m; sourceTree = "<group>"; };
+		3DA0C30A19F1B8E60077A7DC /* KWKeyboardListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWKeyboardListener.h; sourceTree = "<group>"; };
+		3DA0C30B19F1B8E60077A7DC /* KWKeyboardListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWKeyboardListener.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,7 @@
 		3DA0C2E219F1B8B30077A7DC /* KeyboardListener */ = {
 			isa = PBXGroup;
 			children = (
+				3DA0C30919F1B8C70077A7DC /* KWKeyboardListener */,
 				3DA0C2E719F1B8B30077A7DC /* AppDelegate.h */,
 				3DA0C2E819F1B8B30077A7DC /* AppDelegate.m */,
 				3DA0C2EA19F1B8B30077A7DC /* ViewController.h */,
@@ -117,6 +121,15 @@
 				3DA0C2FE19F1B8B30077A7DC /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3DA0C30919F1B8C70077A7DC /* KWKeyboardListener */ = {
+			isa = PBXGroup;
+			children = (
+				3DA0C30A19F1B8E60077A7DC /* KWKeyboardListener.h */,
+				3DA0C30B19F1B8E60077A7DC /* KWKeyboardListener.m */,
+			);
+			path = KWKeyboardListener;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +176,7 @@
 		3DA0C2D819F1B8B30077A7DC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = KW;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Kwarter Inc.";
 				TargetAttributes = {
@@ -219,6 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DA0C30C19F1B8E60077A7DC /* KWKeyboardListener.m in Sources */,
 				3DA0C2EC19F1B8B30077A7DC /* ViewController.m in Sources */,
 				3DA0C2E919F1B8B30077A7DC /* AppDelegate.m in Sources */,
 				3DA0C2E619F1B8B30077A7DC /* main.m in Sources */,
