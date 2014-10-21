@@ -3,6 +3,8 @@ KWKeyboardListener
 
 Easy way to make a class react to keyboard events.
 
+##Register a new listener
+
 Before:
 ```objc
 - (void)registerMyClass {
@@ -68,6 +70,9 @@ UIKIT_EXTERN NSString *const UIKeyboardFrameEndUserInfoKey          NS_AVAILABLE
 UIKIT_EXTERN NSString *const UIKeyboardAnimationDurationUserInfoKey NS_AVAILABLE_IOS(3_0); // NSNumber of double
 UIKIT_EXTERN NSString *const UIKeyboardAnimationCurveUserInfoKey    NS_AVAILABLE_IOS(3_0); // NSNumber of NSUInteger 
 ```
+
+##Know the keyboard state
+Moreover, the KWKeyboardListener singleton, which is instantiated at the class load, so you don't have to do anything, allows you to get the current state of the keyboard from anywhere in the app, using its `keyboardVisible` boolean property.
 
 ##Pod
 ```pod 'KWKeyboardListener', '~>1.0'```
