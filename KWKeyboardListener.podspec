@@ -24,8 +24,9 @@ Pod::Spec.new do |s|
 
   s.author             = { "Florent Crivello" => "florent.crivello@gmail.com" }
   s.platform     = :ios, "5.0"
+  s.requires_arc = true
 
-  s.source       = { :git => "https://github.com/Altimor/KWKeyboardListener", :tag => "1.0" }
+  s.source       = { :git => "https://github.com/Altimor/KWKeyboardListener.git", :tag => "1.0" }
   s.source_files  = "KeyboardListener/KWKeyboardListener", "KeyboardListener/KWKeyboardListener/*.{h,m}"
 
 end

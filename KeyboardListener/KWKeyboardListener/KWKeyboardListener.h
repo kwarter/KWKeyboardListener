@@ -8,6 +8,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+typedef void (^KWKeyboardActionHandler)(CGRect keyboardFrame, BOOL opening, BOOL closing);
 
 @protocol KWKeyboardEventsListener <NSObject>
 
@@ -26,6 +29,7 @@
 
 - (void)addKeyboardEventsListener:(id<KWKeyboardEventsListener>)listener;
 - (void)removeKeyboardEventsListener:(id<KWKeyboardEventsListener>)listener;
+- (void)addKeyboardEventsListener:(id)listener withHandler:(KWKeyboardActionHandler)actionHandler;
 
 @property (nonatomic, assign, readonly) BOOL keyboardVisible;
 

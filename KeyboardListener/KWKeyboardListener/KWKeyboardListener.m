@@ -8,11 +8,13 @@
 //
 
 #import "KWKeyboardListener.h"
-#import <UIKit/UIKit.h>
+
+//NSString *const
 
 @interface KWKeyboardListener ()
 
-@property (nonatomic, strong) NSMutableSet *registeredListeners;
+@property (nonatomic, strong) NSHashTable *registeredListeners;
+@property (nonatomic, strong) NSMapTable *registeredListenersWithBlockHandlers;
 @property (nonatomic, assign) BOOL keyboardVisible;
 
 @end
@@ -44,7 +46,8 @@ static KWKeyboardListener *sharedInstance;
     [defaultCenter addObserver:self selector:@selector(didChangeFrame:) name:UIKeyboardDidChangeFrameNotification object:nil];
     [defaultCenter addObserver:self selector:@selector(willChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
-    self.registeredListeners = [NSMutableSet new];
+    self.registeredListeners = [NSHashTable weakObjectsHashTable];
+    self.registeredListenersWithBlockHandlers = [NSMapTable weakToStrongObjectsMapTable];
     
     return self;
 }
@@ -57,6 +60,16 @@ static KWKeyboardListener *sharedInstance;
     if ([self.registeredListeners containsObject:listener]) {
         [self.registeredListeners removeObject:listener];
     }
+    if ([self.registeredListenersWithBlockHandlers objectForKey:listener]) {
+        [self.registeredListenersWithBlockHandlers removeObjectForKey:listener];
+    }
+}
+
+- (void)addKeyboardEventsListener:(id)listener withHandler:(KWKeyboardActionHandler)actionHandler {
+    if (![self.registeredListenersWithBlockHandlers objectForKey:listener]) {
+        [self.registeredListenersWithBlockHandlers setObject:[actionHandler copy] forKey:listener];
+    }
+    [self addKeyboardEventsListener:listener];
 }
 
 - (void)notifyListenersWithSelector:(SEL)selector withObject:(id)anObject {
@@ -66,34 +79,66 @@ static KWKeyboardListener *sharedInstance;
             IMP imp = [listener methodForSelector:selector];
             void (*func)(id, SEL, id) = (void *)imp;
             func(listener, selector, anObject);
+        } else if (!listener) {
+            [self.registeredListeners removeObject:anObject];
+        }
+    }
+}
+
+- (void)notifyBlockListenersWithKeyboardFrame:(CGRect)keyboardFrame
+                                      opening:(BOOL)opening
+                                      closing:(BOOL)closing {
+    for (id listener in self.registeredListenersWithBlockHandlers) {
+        if (listener) {
+            void (^handler)(CGRect, BOOL, BOOL);
+            handler = [self.registeredListenersWithBlockHandlers objectForKey:listener];
+            handler(keyboardFrame,opening,closing);
+        } else {
+            [self.registeredListenersWithBlockHandlers removeObjectForKey:listener];
         }
     }
 }
 
 - (void)didShow:(NSNotification *)notification {
-    self.keyboardVisible = YES;
-    [self notifyListenersWithSelector:@selector(keyboardDidShowWithInfos:) withObject:notification.userInfo];
+    if (!self.keyboardVisible) {
+        self.keyboardVisible = YES;
+        [self notifyListenersWithSelector:@selector(keyboardDidShowWithInfos:) withObject:notification.userInfo];
+    }
 }
 
 - (void)willShow:(NSNotification *)notification {
-    [self notifyListenersWithSelector:@selector(keyboardWillShowWithInfos:) withObject:notification.userInfo];
+    if (!self.keyboardVisible) {
+        [self notifyListenersWithSelector:@selector(keyboardWillShowWithInfos:) withObject:notification.userInfo];
+        CGRect keyboardFrame = ((NSValue *)[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey]).CGRectValue;
+        [self notifyBlockListenersWithKeyboardFrame:keyboardFrame opening:YES closing:NO];
+    }
 }
 
 - (void)didHide:(NSNotification *)notification {
-    self.keyboardVisible = NO;
-    [self notifyListenersWithSelector:@selector(keyboardDidHideWithInfos:) withObject:notification.userInfo];
+    if (self.keyboardVisible) {
+        self.keyboardVisible = NO;
+        [self notifyListenersWithSelector:@selector(keyboardDidHideWithInfos:) withObject:notification.userInfo];
+    }
 }
 
 - (void)willHide:(NSNotification *)notification {
-    [self notifyListenersWithSelector:@selector(keyboardWillHideWithInfos:) withObject:notification.userInfo];
+    if (self.keyboardVisible) {
+        [self notifyListenersWithSelector:@selector(keyboardWillHideWithInfos:) withObject:notification.userInfo];
+        CGRect keyboardFrame = ((NSValue *)[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey]).CGRectValue;
+        [self notifyBlockListenersWithKeyboardFrame:keyboardFrame opening:NO closing:YES];
+    }
 }
 
 - (void)didChangeFrame:(NSNotification *)notification {
     [self notifyListenersWithSelector:@selector(keyboardDidChangeFrameWithInfos:) withObject:notification.userInfo];
+    CGRect keyboardFrame = ((NSValue *)[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey]).CGRectValue;
+    [self notifyBlockListenersWithKeyboardFrame:keyboardFrame opening:NO closing:NO];
 }
 
 - (void)willChangeFrame:(NSNotification *)notification {
     [self notifyListenersWithSelector:@selector(keyboardWillChangeFrameWithInfos:) withObject:notification.userInfo];
+    CGRect keyboardFrame = ((NSValue *)[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey]).CGRectValue;
+    [self notifyBlockListenersWithKeyboardFrame:keyboardFrame opening:NO closing:NO];
 }
 
 @end
