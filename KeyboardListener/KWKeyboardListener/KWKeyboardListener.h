@@ -32,5 +32,6 @@ typedef void (^KWKeyboardActionHandler)(CGRect keyboardFrame, BOOL opening, BOOL
 - (void)addKeyboardEventsListener:(id)listener withHandler:(KWKeyboardActionHandler)actionHandler;
 
 @property (nonatomic, assign, readonly) BOOL keyboardVisible;
+@property (nonatomic, assign, readonly) CGRect lastKeyboardFrame;
 
 @end
